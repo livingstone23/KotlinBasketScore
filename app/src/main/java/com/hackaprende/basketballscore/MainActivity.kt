@@ -3,6 +3,7 @@ package com.hackaprende.basketballscore
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.hackaprende.basketballscore.databinding.ActivityMainBinding
@@ -22,13 +23,24 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+        //Para obtener los valores del viewModel localscore
+        viewModel.localScore.observe(this, Observer {
+            localScoreValue ->
+            binding.localScoreText.text = localScoreValue.toString()
+        })
+
+        //Para obtener los valores del viewmodel Visitante
+        viewModel.visitorScore.observe(this, Observer {
+            visitorScoreValue ->
+            binding.visitorScoreText.text = visitorScoreValue.toString()
+        })
+
         setupButtons()
     }
 
     private fun setupButtons() {
         binding.localMinusButton.setOnClickListener {
            viewModel.decreaseLocalScore()
-            binding.localScoreText.text = viewModel.localScore.toString()
 
         }
 
@@ -42,7 +54,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.visitorMinusButton.setOnClickListener {
                 viewModel.decreaseVisitorScore()
-                binding.visitorScoreText.text = viewModel.visitorScore.toString()
         }
 
         binding.visitorPlusButton.setOnClickListener {
@@ -54,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.restartButton.setOnClickListener {
-            resetScores()
+            viewModel.resetScores()
         }
 
         binding.resultsButton.setOnClickListener {
@@ -62,29 +73,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun resetScores() {
-        viewModel.resetScores()
-
-
-        binding.visitorScoreText.text = viewModel.localScore.toString()
-        binding.localScoreText.text = viewModel.visitorScore.toString()
-    }
 
     private fun addPointsToScore(points: Int, isLocal: Boolean) {
 
         viewModel.addPointsToScore(points, isLocal)
 
-        if (isLocal) {
-            binding.localScoreText.text = viewModel.localScore.toString()
-        } else {
-            binding.visitorScoreText.text = viewModel.visitorScore.toString()
-        }
     }
 
     private fun startScoreActivity() {
         val intent = Intent(this, ScoreActivity::class.java)
-        intent.putExtra(ScoreActivity.LOCAL_SCORE_KEY, viewModel.localScore)
-        intent.putExtra(ScoreActivity.VISITOR_SCORE_KEY, viewModel.visitorScore)
+        intent.putExtra(ScoreActivity.LOCAL_SCORE_KEY, viewModel.localScore.value)
+        intent.putExtra(ScoreActivity.VISITOR_SCORE_KEY, viewModel.visitorScore.value)
         startActivity(intent)
     }
 

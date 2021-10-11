@@ -1,37 +1,50 @@
 package com.hackaprende.basketballscore
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MainViewModel: ViewModel() {
-    public var localScore = 0
-    public var visitorScore = 0
+    var localScore: MutableLiveData<Int> = MutableLiveData()
+    var visitorScore: MutableLiveData<Int> = MutableLiveData()
+
+    init {
+        resetScores()
+    }
 
     fun resetScores() {
-        localScore = 0
-        visitorScore = 0
+        localScore.value = 0
+        visitorScore.value = 0
     }
 
     fun addPointsToScore(points: Int, isLocal: Boolean) {
         if (isLocal) {
-            localScore += points
+            //Forma Anterior
+            //localScore.value = localScore.value!! + points
+            //Nueva forma
+            localScore.value = localScore.value?.plus(points)
         } else {
-            visitorScore += points
+            //visitorScore.value = localScore.value!! + points
+            visitorScore.value = visitorScore.value?.plus(points)
         }
     }
 
     fun decreaseLocalScore(){
-        if(localScore > 0){
-            localScore--
+        if(localScore.value!! > 0){
+            //Forma anterior
+            //localScore.value = localScore.value!! - 1
+            //Nueva forma
+            localScore.value = localScore.value?.minus(1)
         }
     }
 
     fun decreaseVisitorScore(){
-        if(visitorScore > 0){
-            visitorScore--
+        if(visitorScore.value!! > 0){
+            //Forma anterior
+            //visitorScore.value = visitorScore.value!! - 1
+            //Nueva forma
+            visitorScore.value = visitorScore.value?.minus(1)
         }
     }
-
-
 
 
 }
