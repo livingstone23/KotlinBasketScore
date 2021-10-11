@@ -22,6 +22,10 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+
+        binding.mainViewModel = viewModel
+
+
         //Para obtener los valores del viewModel localscore
         viewModel.localScoreLiveData.observe(this, Observer {
             localScoreValue ->
@@ -39,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
+        /*
         binding.localMinusButton.setOnClickListener {
            viewModel.decreaseLocalScore()
 
@@ -52,6 +57,7 @@ class MainActivity : AppCompatActivity() {
             addPointsToScore(2, isLocal = true)
         }
 
+
         binding.visitorMinusButton.setOnClickListener {
                 viewModel.decreaseVisitorScore()
         }
@@ -64,9 +70,11 @@ class MainActivity : AppCompatActivity() {
             addPointsToScore(2, isLocal = false)
         }
 
+
         binding.restartButton.setOnClickListener {
             viewModel.resetScores()
         }
+        */
 
         binding.resultsButton.setOnClickListener {
             startScoreActivity()
