@@ -1,19 +1,26 @@
 package com.hackaprende.basketballscore
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MainViewModel: ViewModel() {
-    var localScore: MutableLiveData<Int> = MutableLiveData()
-    var visitorScore: MutableLiveData<Int> = MutableLiveData()
+    private var _localScore: MutableLiveData<Int> = MutableLiveData()
+    private var _visitorScore: MutableLiveData<Int> = MutableLiveData()
+
+    val localScoreLiveData: LiveData<Int>
+        get() = _localScore
+
+    val visitorScoreLiveData: LiveData<Int>
+        get() = _visitorScore
 
     init {
         resetScores()
     }
 
     fun resetScores() {
-        localScore.value = 0
-        visitorScore.value = 0
+        _localScore.value = 0
+        _visitorScore.value = 0
     }
 
     fun addPointsToScore(points: Int, isLocal: Boolean) {
@@ -21,28 +28,28 @@ class MainViewModel: ViewModel() {
             //Forma Anterior
             //localScore.value = localScore.value!! + points
             //Nueva forma
-            localScore.value = localScore.value?.plus(points)
+            _localScore.value = _localScore.value?.plus(points)
         } else {
             //visitorScore.value = localScore.value!! + points
-            visitorScore.value = visitorScore.value?.plus(points)
+            _visitorScore.value = _visitorScore.value?.plus(points)
         }
     }
 
     fun decreaseLocalScore(){
-        if(localScore.value!! > 0){
+        if(_localScore.value!! > 0){
             //Forma anterior
             //localScore.value = localScore.value!! - 1
             //Nueva forma
-            localScore.value = localScore.value?.minus(1)
+            _localScore.value = _localScore.value?.minus(1)
         }
     }
 
     fun decreaseVisitorScore(){
-        if(visitorScore.value!! > 0){
+        if(_visitorScore.value!! > 0){
             //Forma anterior
             //visitorScore.value = visitorScore.value!! - 1
             //Nueva forma
-            visitorScore.value = visitorScore.value?.minus(1)
+            _visitorScore.value = _visitorScore.value?.minus(1)
         }
     }
 

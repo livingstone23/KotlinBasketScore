@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.hackaprende.basketballscore.databinding.ActivityMainBinding
 
@@ -24,16 +23,17 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         //Para obtener los valores del viewModel localscore
-        viewModel.localScore.observe(this, Observer {
+        viewModel.localScoreLiveData.observe(this, Observer {
             localScoreValue ->
             binding.localScoreText.text = localScoreValue.toString()
         })
 
         //Para obtener los valores del viewmodel Visitante
-        viewModel.visitorScore.observe(this, Observer {
+        viewModel.visitorScoreLiveData.observe(this, Observer {
             visitorScoreValue ->
             binding.visitorScoreText.text = visitorScoreValue.toString()
         })
+
 
         setupButtons()
     }
@@ -82,8 +82,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun startScoreActivity() {
         val intent = Intent(this, ScoreActivity::class.java)
-        intent.putExtra(ScoreActivity.LOCAL_SCORE_KEY, viewModel.localScore.value)
-        intent.putExtra(ScoreActivity.VISITOR_SCORE_KEY, viewModel.visitorScore.value)
+        intent.putExtra(ScoreActivity.LOCAL_SCORE_KEY, viewModel.localScoreLiveData.value)
+        intent.putExtra(ScoreActivity.VISITOR_SCORE_KEY, viewModel.visitorScoreLiveData.value)
         startActivity(intent)
     }
 
